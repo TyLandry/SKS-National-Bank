@@ -50,4 +50,23 @@ BEGIN
                   ' for AccountID ', i.AccountID, ', Amount: $', i.Amount)
     FROM inserted i;
 END;
+
+-- create account trigger
+CREATE OR ALTER TRIGGER dbo.trg_LogNewAccount
+ON dbo.Account
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO dbo.Audit (Explanation)
+    SELECT CONCAT(
+               'Account created: ', i.AccountType,
+               ' | Branch ', i.BranchID,
+               ' | Balance $', FORMAT(i.Balance, 'N2')
+           )
+    FROM inserted i;
+END;
+GO
+
 GO
