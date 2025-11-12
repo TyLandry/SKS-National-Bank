@@ -4,13 +4,13 @@ USE SKS_National_Bank;
 
 GO
 
--- Create a login and user named ìcustomer_group_[?]î where [?] is your group letter. (For example, ìcustomer_group_Aî.)
--- o Their password should be ìcustomerî.
+-- Create a login and user named ‚Äúcustomer_group_[?]‚Äù where [?] is your group letter. (For example, ‚Äúcustomer_group_A‚Äù.)
+-- o Their password should be ‚Äúcustomer‚Äù.
 -- o Their user account should only be able to read tables that are related to customers, 
 -- based on your ERD. (For example, tables related to customer information, accounts, loans, and payments).
 
---Create a login and user named ìaccountant_group_[?]î where [?] is your group letter. (For example, ìaccountant_group_Bî.)
--- o Their password should be ìaccountantî.
+--Create a login and user named ‚Äúaccountant_group_[?]‚Äù where [?] is your group letter. (For example, ‚Äúaccountant_group_B‚Äù.)
+-- o Their password should be ‚Äúaccountant‚Äù.
 -- this creates the customer and accountant.
 CREATE LOGIN customer_group_A WITH PASSWORD = 'customer';
 CREATE USER customer_group_A FOR LOGIN customer_group_A;
@@ -50,7 +50,7 @@ GRANT SELECT ON LoanPayment TO accountant_group_A;
 -- payments and loans, based on your ERD. Those permissions should be revoked.
 DENY INSERT, UPDATE, DELETE ON Account TO accountant_group_A;
 DENY INSERT, UPDATE, DELETE ON CustomerAccount TO accountant_group_A;
-DENY INSERT, UPDATE, DELETE ON OverDraft TO accountant_group_A;
+DENY INSERT, UPDATE, DELETE ON Overdraft TO accountant_group_A;
 DENY INSERT, UPDATE, DELETE ON Loan TO accountant_group_A;
 DENY INSERT, UPDATE, DELETE ON LoanCustomer TO accountant_group_A;
 DENY INSERT, UPDATE, DELETE ON LoanPayment TO accountant_group_A;
@@ -71,4 +71,5 @@ EXECUTE AS USER = 'accountant_group_A';
 SELECT TOP (2) * FROM Branch;     -- should work
 UPDATE Account SET Balance = Balance WHERE 1 = 0;  -- should fail (denied)
 REVERT;
+
 GO
