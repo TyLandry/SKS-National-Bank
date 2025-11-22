@@ -92,3 +92,38 @@ SELECT TOP (5) * FROM dbo.Audit ORDER BY AuditID DESC;
 
 -- End of Account Trigger Testing
 
+
+-- Branch TotalLoans trigger test
+
+    --CASE 1 Normal Single Loan Insert
+    INSERT INTO Loan (BranchID, Amount, StartDate)
+    VALUES (1, 10000, '2025-10-01');
+    --Verify
+    SELECT BranchID, TotalLoans
+    FROM Branch
+    WHERE BranchID = 1;
+
+    --CASE 2 Multi-Row Insert
+    INSERT INTO Loan (BranchID, Amount, StartDate)
+    VALUES 
+    (1, 5000, '2025-10-03'),
+    (1, 7000, '2025-10-04'),
+    (2, 4000, '2025-10-03');
+    --Verify
+    SELECT BranchID, TotalLoans
+    FROM Branch
+    WHERE BranchID IN (1, 2);
+
+    --CASE 3 Insert Loan for a Branch with NULL TotalLoans
+    
+    --setting a TotalLoans value NULL for testing
+    UPDATE Branch SET TotalLoans = NULL WHERE BranchID = 3;
+    --Inserting a new loan in the loan table
+    INSERT INTO Loan (BranchID, Amount, StartDate)
+    VALUES (3, 25000, '2025-10-05');
+    --Trigger should treat NULL as 0 because of COALESCE
+    --Verify
+    SELECT BranchID, TotalLoans FROM Branch WHERE BranchID = 3;
+
+--End of Branch TotalLoan trigger testing
+   
