@@ -76,14 +76,20 @@ AFTER INSERT
 AS
 BEGIN
     SET NOCOUNT ON;
- 
+
+    -- Sum amounts per BranchID first
     UPDATE b
-    SET b.TotalLoans = COALESCE(b.TotalLoans, 0) + i.Amount
+    SET b.TotalLoans = COALESCE(b.TotalLoans, 0) + s.TotalAmount
     FROM Branch b
-    JOIN INSERTED i ON b.BranchID = i.BranchID;
+    JOIN (
+        SELECT BranchID, SUM(Amount) AS TotalAmount
+        FROM INSERTED
+        GROUP BY BranchID
+    ) s ON b.BranchID = s.BranchID;
 END;
 GO
 --The trigger automatically increases the branch’s total loan amount every time a new loan is inserted .
 
 GO
+
 
