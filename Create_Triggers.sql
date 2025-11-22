@@ -69,7 +69,7 @@ BEGIN
 END;
 GO
 
---update branch total loan trigger 
+--Branch total loan trigger 
 CREATE TRIGGER trg_UpdateBranchTotalLoans
 ON Loan
 AFTER INSERT
@@ -91,5 +91,6 @@ GO
 --The trigger automatically increases the branch’s total loan amount every time a new loan is inserted .
 
 GO
+
 
 
