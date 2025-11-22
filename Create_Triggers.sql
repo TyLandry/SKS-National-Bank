@@ -69,4 +69,21 @@ BEGIN
 END;
 GO
 
+--update branch total loan trigger 
+CREATE TRIGGER trg_UpdateBranchTotalLoans
+ON Loan
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+ 
+    UPDATE b
+    SET b.TotalLoans = COALESCE(b.TotalLoans, 0) + i.Amount
+    FROM Branch b
+    JOIN INSERTED i ON b.BranchID = i.BranchID;
+END;
 GO
+--The trigger automatically increases the branch’s total loan amount every time a new loan is inserted .
+
+GO
+
