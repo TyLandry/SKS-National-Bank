@@ -13,6 +13,40 @@
 USE [SKS_National_Bank];
 GO
 
+-- Addresses
+INSERT INTO [dbo].[Address] (StreetNumber, StreetName, City, Province, PostalCode) VALUES
+('101', 'Maple Street', 'Springfield', 'AB', 'A1A 1A1'),
+('202', 'Oak Avenue', 'Shelbyville', 'AB', 'A1A 1A2'),
+('303', 'Pine Road', 'Ogdenville', 'AB', 'A1A 1A3'),
+('404', 'Cedar Lane', 'North Haverbrook', 'AB', 'A1A 1A4'),
+('505', 'Birch Blvd', 'Capital City', 'AB', 'A1A 1A5'),
+('606', 'Elm Street', 'Springfield', 'AB', 'A1A 1A6'),
+('707', 'Ash Drive', 'Shelbyville', 'AB', 'A1A 1A7'),
+('808', 'Spruce Court', 'Ogdenville', 'AB', 'A1A 1A8'),
+('909', 'Fir Parkway', 'Capital City', 'AB', 'A1A 1A9'),
+('111', 'Poplar Road', 'Springfield', 'AB', 'A1A 2A1'),
+('222', 'Willow Street', 'Springfield', 'AB', 'A1A 2A2'),
+('333', 'Holly Avenue', 'Shelbyville', 'AB', 'A1A 2A3'),
+('444', 'Juniper Road', 'Ogdenville', 'AB', 'A1A 2A4'),
+('555', 'Chestnut Boulevard', 'Capital City', 'AB', 'A1A 2A5'),
+('666', 'Magnolia Street', 'Springfield', 'AB', 'A1A 2A6'),
+('777', 'Palm Avenue', 'Shelbyville', 'AB', 'A1A 2A7'),
+('888', 'Cypress Lane', 'Capital City', 'AB', 'A1A 2A8'),
+('999', 'Laurel Way', 'Ogdenville', 'AB', 'A1A 2A9'),
+('112', 'Forest Road', 'Springfield', 'AB', 'A1A 3A1'),
+('223', 'Riverbend Drive', 'Shelbyville', 'AB', 'A1A 3A2'),
+('334', 'Highland Court', 'Ogdenville', 'AB', 'A1A 3A3'),
+('445', 'Silverleaf Road', 'Capital City', 'AB', 'A1A 3A4'),
+('556', 'Hillcrest Street', 'North Haverbrook', 'AB', 'A1A 3A5'),
+('667', 'Heritage Avenue', 'Springfield', 'AB', 'A1A 3A6'),
+('778', 'Stonebrook Lane', 'Shelbyville', 'AB', 'A1A 3A7'),
+('889', 'Pineview Road', 'Ogdenville', 'AB', 'A1A 3A8'),
+('990', 'Crestwood Blvd', 'Capital City', 'AB', 'A1A 3A9'),
+('113', 'Rosewood Ave', 'Springfield', 'AB', 'A1A 4A1'),
+('224', 'Greenfield St', 'Ogdenville', 'AB', 'A1A 4A2'),
+('335', 'Summit Drive', 'Capital City', 'AB', 'A1A 4A3');
+GO
+
 -- Branches
 INSERT INTO [dbo].[Branch] (Name, City, TotalDeposits, TotalLoans) VALUES
 ('Downtown', 'Springfield', 500000.00, 250000.00),
@@ -28,31 +62,31 @@ INSERT INTO [dbo].[Branch] (Name, City, TotalDeposits, TotalLoans) VALUES
 GO
 
 -- Branch Locations
-INSERT INTO [dbo].[BranchLocation] (Name, Address, City, LocationType, BranchID) VALUES
-('Downtown Main', '100 Main St', 'Springfield', 'Main', 1),
-('Uptown Center', '300 Center Ave', 'Shelbyville', 'Main', 2),
-('Eastside Plaza', '400 East St', 'Springfield', 'Satellite', 3),
-('Westend Hub', '500 West Rd', 'Ogdenville', 'Main', 4),
-('Northside Mall', '600 North Ave', 'North Haverbrook', 'Satellite', 5),
-('Riverside HQ', '700 River Blvd', 'Capital City', 'Main', 6),
-('Hilltop Branch', '800 Hill Rd', 'Springfield', 'Satellite', 7),
-('Midtown Tower', '900 Midtown St', 'Shelbyville', 'Main', 8),
-('Airport Kiosk', '1000 Jetway Blvd', 'Capital City', 'Satellite', 9),
-('Harborfront Dock', '1100 Harbor Rd', 'Ogdenville', 'Satellite', 10);
+INSERT INTO [dbo].[BranchLocation] (AddressID, LocationType, BranchID) VALUES
+(1, 'Main', 1),
+(2, 'Main', 2),
+(3, 'Satellite', 3),
+(4, 'Main', 4),
+(5, 'Satellite', 5),
+(6, 'Main', 6),
+(7, 'Satellite', 7),
+(8, 'Main', 8),
+(9, 'Satellite', 9),
+(10, 'Satellite', 10);
 GO
 
 -- Employees
-INSERT INTO [dbo].[Employee] (FullName, HomeAddress, StartDate, Role, ManagerID) VALUES
-('Alice Johnson', '123 Oak Rd', '2022-03-10', 'Branch Manager', NULL),
-('Bob Smith', '456 Pine Ln', '2023-01-15', 'Personal Banker', 1),
-('Carol Lee', '789 Maple Dr', '2022-08-01', 'Loan Officer', 1),
-('David Kim', '321 Birch St', '2023-06-20', 'Teller', 1),
-('Eva Martinez', '654 Walnut Ave', '2021-05-11', 'Branch Manager', NULL),
-('Frank Nelson', '987 Chestnut Rd', '2023-04-19', 'Loan Officer', 5),
-('Grace Chen', '246 Fir Ct', '2022-11-22', 'Personal Banker', 5),
-('Henry Brown', '135 Cedar Blvd', '2024-02-14', 'Teller', 5),
-('Irene Davis', '753 Aspen Way', '2023-03-01', 'Loan Officer', 1),
-('Jack Wilson', '852 Poplar St', '2022-12-12', 'Personal Banker', 1);
+INSERT INTO [dbo].[Employee] (Firstname, Lastname, StartDate, Role, ManagerID, AddressID) VALUES
+('Alice', 'Johnson', '2022-03-10', 'Branch Manager', NULL, 11),
+('Bob', 'Smith', '2023-01-15', 'Personal Banker', 1, 12),
+('Carol', 'Lee', '2022-08-01', 'Loan Officer', 1, 13),
+('David', 'Kim', '2023-06-20', 'Teller', 1, 14),
+('Eva', 'Martinez', '2021-05-11', 'Branch Manager', NULL, 15),
+('Frank', 'Nelson', '2023-04-19', 'Loan Officer', 5, 16),
+('Grace', 'Chen', '2022-11-22', 'Personal Banker', 5, 17),
+('Henry', 'Brown', '2024-02-14', 'Teller', 5, 18),
+('Irene', 'Davis', '2023-03-01', 'Loan Officer', 1, 19),
+('Jack', 'Wilson', '2022-12-12', 'Personal Banker', 1, 20);
 GO
 
 -- Employee Locations
@@ -70,17 +104,17 @@ INSERT INTO [dbo].[EmployeeLocation] (EmployeeID, LocationID) VALUES
 GO
 
 -- Customers
-INSERT INTO [dbo].[Customer] (FullName, HomeAddress, PersonalBankerID, LoanOfficerID) VALUES
-('Emily Clark', '11 Elm St', 2, 3),
-('Frank Wright', '22 Cedar Ave', 2, 3),
-('Grace Miller', '33 Willow Way', 2, NULL),
-('Henry Adams', '44 Spruce Blvd', 2, 3),
-('Ivy Thompson', '55 Alder Dr', 7, 6),
-('James Parker', '66 Cypress Ln', 7, 6),
-('Kelly Roberts', '77 Beech Ct', 7, NULL),
-('Liam Scott', '88 Palm Ave', 7, 6),
-('Mia Turner', '99 Magnolia Blvd', 10, 9),
-('Noah Evans', '101 Sycamore Rd', 10, 9);
+INSERT INTO [dbo].[Customer] (Firstname, Lastname, AddressID, PersonalBankerID, LoanOfficerID) VALUES
+('Emily', 'Clark', 21, 2, 3),
+('Frank', 'Wright', 22, 2, 3),
+('Grace', 'Miller', 23, 2, NULL),
+('Henry', 'Adams', 24, 2, 3),
+('Ivy', 'Thompson', 25, 7, 6),
+('James', 'Parker', 26, 7, 6),
+('Kelly', 'Roberts', 27, 7, NULL),
+('Liam', 'Scott', 28, 7, 6),
+('Mia', 'Turner', 29, 10, 9),
+('Noah', 'Evans', 30, 10, 9);
 GO
 
 -- Accounts
@@ -166,3 +200,4 @@ INSERT INTO [dbo].[LoanPayment] (LoanID, PaymentNumber, PaymentDate, Amount) VAL
 (8, 1, '2025-09-20', 1050.00),
 (9, 1, '2025-09-22', 2000.00);
 GO
+
