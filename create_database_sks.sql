@@ -26,6 +26,19 @@ GO
 USE [SKS_National_Bank];
 GO
 
+--Address Table
+
+CREATE TABLE [dbo].[Address]
+(
+[AddressID] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+[StreetNumber] NVARCHAR(255) NOT NULL,
+[StreetName] NVARCHAR(255) NOT NULL,
+[City] NVARCHAR(255) NOT NULL,
+[Province] NVARCHAR(255) NOT NULL,
+[PostalCode] NVARCHAR(20) NOT NULL
+);
+GO
+
 --Branch Table
 
 CREATE TABLE [dbo].[Branch] 
@@ -43,12 +56,11 @@ GO
 CREATE TABLE [dbo].[BranchLocation]
 (
 [LocationID] INT IDENTITY(1,1) PRIMARY KEY,
-[Name] NVARCHAR(255) NOT NULL,
-[Address] NVARCHAR(255) NOT NULL,
-[City] NVARCHAR(255) NOT NULL,
+[AddressID] INT NOT NULL,
 [LocationType] NVARCHAR(100) NOT NULL,
-[BranchID] INT NULL,
-FOREIGN KEY (BranchID)	REFERENCES [DBO].[Branch](BranchID)
+[BranchID] INT NOT NULL,
+FOREIGN KEY (AddressID)	REFERENCES [dbo].[Address](AddressID),
+FOREIGN KEY (BranchID)	REFERENCES [dbo].[Branch](BranchID)
 );
 GO
 
@@ -57,12 +69,14 @@ GO
 CREATE TABLE [dbo].[Employee]
 (
 [EmployeeID] INT IDENTITY(1,1) PRIMARY KEY,
-[FullName] NVARCHAR(255) NOT NULL,
-[HomeAddress] NVARCHAR(255),
+[Firstname] NVARCHAR(100) NOT NULL,
+[Lastname] NVARCHAR(100) NOT NULL,
 [StartDate] DATE,
 [Role]  NVARCHAR(100),
 [ManagerID] INT NULL,
+[AddressID] INT NOT NULL,
 FOREIGN KEY (ManagerID) REFERENCES [dbo].[Employee](EmployeeID),
+FOREIGN KEY (AddressID) REFERENCES [dbo].[Address](AddressID),
 CONSTRAINT EmployeeNotOwnManager CHECK ([EmployeeID] <> [ManagerID])
 );
 GO
@@ -84,15 +98,17 @@ GO
 CREATE TABLE [dbo].[Customer]
 (
 [CustomerID] INT IDENTITY(1,1) PRIMARY KEY,
-[FullName] NVARCHAR(255) NOT NULL,
-[HomeAddress] NVARCHAR(255),
+[Firstname] NVARCHAR(100) NOT NULL,
+[Lastname] NVARCHAR(100) NOT NULL,
+[AddressID] INT NOT NULL,
 [PersonalBankerID] INT NULL,
 [LoanOfficerID] INT NULL,
+FOREIGN KEY (AddressID) REFERENCES [dbo].[Address](AddressID),
 FOREIGN KEY (PersonalBankerID) REFERENCES [dbo].[Employee](EmployeeID),
 FOREIGN KEY (LoanOfficerID) REFERENCES [dbo].[Employee](EmployeeID)
 );
 GO
-
+   
 --Account Table
 
 CREATE TABLE [dbo].[Account]
@@ -150,7 +166,8 @@ CREATE TABLE [dbo].[Loan]
 [BranchID] INT NOT NULL,
 [Amount] DECIMAL(18,2) NOT NULL,
 [StartDate] DATE,
-FOREIGN KEY (BranchID) REFERENCES [dbo].[Branch](BranchID)
+FOREIGN KEY (BranchID) REFERENCES [dbo].[Branch](BranchID),
+CONSTRAINT chk_LoanAmount_Positive CHECK (Amount > 0)
 );
 GO
 
@@ -177,4 +194,5 @@ CREATE TABLE [dbo].[LoanPayment]
 FOREIGN KEY (LoanID) REFERENCES [dbo].[Loan](LoanID),
 CONSTRAINT PK_LoanPayment PRIMARY KEY (LoanID, PaymentNumber)
 );
+
 GO
