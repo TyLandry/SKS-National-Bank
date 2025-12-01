@@ -77,20 +77,34 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Sum amounts per BranchID first
+    -- 1. Update the total loan amount per Branch
     UPDATE b
     SET b.TotalLoans = COALESCE(b.TotalLoans, 0) + s.TotalAmount
     FROM Branch b
     JOIN (
         SELECT BranchID, SUM(Amount) AS TotalAmount
-        FROM INSERTED
+        FROM inserted
         GROUP BY BranchID
     ) s ON b.BranchID = s.BranchID;
+
+    -- 2. Insert audit records for each affected branch
+    INSERT INTO dbo.Audit (Explanation)
+    SELECT CONCAT(
+            'Loan Updated: For BranchID ', b.BranchID,
+            ', New Total Loans: $', b.TotalLoans
+        )
+    FROM Branch b
+    JOIN (
+        SELECT DISTINCT BranchID
+        FROM inserted
+    ) i ON b.BranchID = i.BranchID;
+
 END;
 GO
 --The trigger automatically increases the branch’s total loan amount every time a new loan is inserted .
 
 GO
+
 
 
 
